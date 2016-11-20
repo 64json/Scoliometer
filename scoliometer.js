@@ -146,6 +146,7 @@ try {
                     angle -= zeroAngle;
                     lastAngle = angle;
                     $angle.text(angle.toFixed(2));
+                    angles.push(angle);
                 };
                 setInterval(function () {
                     $ball.rotate(Math.min(Math.max(lastAngle, -59), 59));
@@ -164,7 +165,6 @@ try {
                                     stayCombo = 0;
                                     mode++;
                                 }
-                                if (lastAngle != null) angles.push(lastAngle);
                             } else stayCombo = 0;
                             break;
                         case 1:
