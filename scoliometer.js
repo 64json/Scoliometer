@@ -188,23 +188,22 @@ try {
             return initScreen($screen, function (angles) {
                 $graph.empty();
                 var partition = parseInt(angles.length / 10);
-                var sum = 0;
+                var max = 0;
                 for (var i = 0; i < partition * 10; i++) {
-                    sum += angles[i];
+                    if (Math.abs(max) < Math.abs(angles[i])) max = angles[i];
                     if (i % partition == partition - 1) {
-                        var avg = sum / partition;
                         var $dot = $('<div class="dot"></div>');
-                        $dot.text(avg.toFixed(1));
+                        $dot.text(max.toFixed(1));
                         var size = $graph.width() / 10;
                         $dot.css({
                             width: size,
                             height: size,
                             'border-radius': size / 2,
-                            marginTop: avg / 180 * $graph.height() + $graph.height() / 2 - size / 2,
-                            background: 'rgb(' + parseInt(Math.min(Math.abs(avg) / 10, 1) * 255) + ',' + parseInt((1 - Math.min(Math.abs(avg) / 10, 1)) * 255) + ',0)'
+                            marginTop: max / 180 * $graph.height() + $graph.height() / 2 - size / 2,
+                            background: 'rgb(' + parseInt(Math.min(Math.abs(max) / 10, 1) * 255) + ',' + parseInt((1 - Math.min(Math.abs(max) / 10, 1)) * 255) + ',0)'
                         });
                         $graph.append($dot);
-                        sum = 0;
+                        max = 0;
                     }
                 }
             });
