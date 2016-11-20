@@ -200,8 +200,8 @@ try {
                             width: size,
                             height: size,
                             'border-radius': size / 2,
-                            marginTop: avg / 360 * $graph.height() + $graph.height() / 2 - size / 2,
-                            background: 'rgb(' + parseInt(Math.min(Math.abs(avg) / 15, 1) * 255) + ',' + parseInt((1 - Math.min(Math.abs(avg) / 15, 1)) * 255) + ',0)'
+                            marginTop: avg / 180 * $graph.height() + $graph.height() / 2 - size / 2,
+                            background: 'rgb(' + parseInt(Math.min(Math.abs(avg) / 10, 1) * 255) + ',' + parseInt((1 - Math.min(Math.abs(avg) / 10, 1)) * 255) + ',0)'
                         });
                         $graph.append($dot);
                         sum = 0;
