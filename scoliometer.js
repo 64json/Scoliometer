@@ -1,8 +1,10 @@
 try {
-    var gn = new GyroNorm();
+    var gn = new GyroNorm({screenAdjusted: true});
     var rotateListener = null;
     var accelerationListener = null;
-    gn.init().then(function () {
+    gn.init({
+        frequency: 50
+    }).then(function () {
         gn.start(function (data) {
             if (rotateListener) rotateListener(data.do.alpha);
             if (accelerationListener) accelerationListener(data.dm);
@@ -79,6 +81,7 @@ try {
             return initScreen($screen, function () {
                 var prevAngle, prevTime = 0;
                 rotateListener = function (angle) {
+                    if (angle > 180) angle -= 360;
                     var time = Date.now();
                     var timeDiff = time - prevTime;
                     $zeroTimeLeft.text('Put the case on the floor for ' + Math.ceil(Math.min(3000 - timeDiff, 3000) / 1000) + ' seconds.');
@@ -115,24 +118,38 @@ try {
         },
         initProtractor: function () {
             var $screen = $('.screen-protractor');
+            var $visibleRect = $screen.find('.visible-rect');
             var zeroAngle = null;
             var $angle = $('#angle');
             var $msg = $screen.find('.msg');
+            var $tube = $('#tube');
             var $ball = $('#ball');
             return initScreen($screen, function (angle) {
                 zeroAngle = angle;
                 var mode = 0;
                 var angles = [];
                 var lastAngle = null;
+                var size = Math.min($visibleRect.innerWidth(), $visibleRect.innerHeight());
+                $tube.css({
+                    width: size,
+                    height: size,
+                    marginLeft: ($visibleRect.innerWidth() - size) / 2,
+                    marginTop: ($visibleRect.innerHeight() - size) / 2
+                });
+                $ball.css({
+                    width: size,
+                    height: size
+                });
                 rotateListener = function (angle) {
+                    if (angle > 180) angle -= 360;
                     $msg.text('Slowly and steadily trace down the spine until the waist line.');
                     angle -= zeroAngle;
                     lastAngle = angle;
                     $angle.text(angle.toFixed(2));
                 };
                 setInterval(function () {
-//                    $ball.rotate(lastAngle | 0);
-                }, 1000);
+                    $ball.rotate(Math.min(Math.max(lastAngle, -59), 59));
+                }, 50);
                 var stayCombo = 0;
                 var zs = new Array(20), zsum = 0;
                 for (var i = 0; i < zs.length; i++) zs[i] = 0;
@@ -167,8 +184,29 @@ try {
         },
         initReport: function () {
             var $screen = $('.screen-report');
+            var $graph = $('.graph');
             return initScreen($screen, function (angles) {
-                alert(angles);
+                $graph.empty();
+                var partition = parseInt(angles.length / 10);
+                var sum = 0;
+                for (var i = 0; i < partition * 10; i++) {
+                    sum += angles[i];
+                    if (i % partition == partition - 1) {
+                        var avg = sum / partition;
+                        var $dot = $('<div class="dot"></div>');
+                        $dot.text(avg.toFixed(1));
+                        var size = $graph.width() / 10;
+                        $dot.css({
+                            width: size,
+                            height: size,
+                            'border-radius': size / 2,
+                            marginTop: avg / 360 * $graph.height() + $graph.height() / 2 - size / 2,
+                            background: 'rgb(' + parseInt(Math.min(Math.abs(avg) / 30, 1) * 255) + ',' + parseInt((1 - Math.min(Math.abs(avg) / 30, 1)) * 255) + ',0)'
+                        });
+                        $graph.append($dot);
+                        sum = 0;
+                    }
+                }
             });
         }
     };
@@ -226,6 +264,15 @@ try {
         });
         return $(this);
     };
+
+    $.fn.setRotateOrigin = function (x, y) {
+        $(this).css({
+            '-webkit-transform-origin:': x + ' ' + y,
+            '-moz-transform-origin:': x + ' ' + y,
+            '-ms-transform-origin': x + ' ' + y,
+            'transform-origin:': x + ' ' + y
+        });
+    }
 } catch (e) {
     alert(e);
 }
