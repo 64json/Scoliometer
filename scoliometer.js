@@ -168,7 +168,7 @@ try {
                             } else stayCombo = 0;
                             break;
                         case 1:
-                            if (zsum < 10) {
+                            if (zsum < 5) {
                                 stayCombo++;
                                 if (stayCombo > 10) {
                                     screen.report.show(angles);
