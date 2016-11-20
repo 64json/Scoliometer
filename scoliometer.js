@@ -158,7 +158,7 @@ try {
                     zsum += -zs.shift() + zs[zs.length - 1];
                     switch (mode) {
                         case 0:
-                            if (zsum > 3) {
+                            if (zsum > 5) {
                                 stayCombo++;
                                 if (stayCombo > 10) {
                                     stayCombo = 0;
@@ -168,7 +168,7 @@ try {
                             } else stayCombo = 0;
                             break;
                         case 1:
-                            if (zsum < 3) {
+                            if (zsum < 5) {
                                 stayCombo++;
                                 if (stayCombo > 10) {
                                     screen.report.show(angles);
