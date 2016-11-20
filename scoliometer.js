@@ -85,7 +85,7 @@ try {
                     var time = Date.now();
                     var timeDiff = time - prevTime;
                     $zeroTimeLeft.text('Put the case on the floor for ' + Math.ceil(Math.min(3000 - timeDiff, 3000) / 1000) + ' seconds.');
-                    if (Math.abs(angle - prevAngle) < 0.5) {
+                    if (Math.abs(angle - prevAngle) < 1) {
                         if (timeDiff > 3000) {
                             screen.instruction.show(angle);
                         }
@@ -160,7 +160,7 @@ try {
                         case 0:
                             if (zsum > 3) {
                                 stayCombo++;
-                                if (stayCombo > 50) {
+                                if (stayCombo > 10) {
                                     stayCombo = 0;
                                     mode++;
                                 }
@@ -201,7 +201,7 @@ try {
                             height: size,
                             'border-radius': size / 2,
                             marginTop: avg / 360 * $graph.height() + $graph.height() / 2 - size / 2,
-                            background: 'rgb(' + parseInt(Math.min(Math.abs(avg) / 30, 1) * 255) + ',' + parseInt((1 - Math.min(Math.abs(avg) / 30, 1)) * 255) + ',0)'
+                            background: 'rgb(' + parseInt(Math.min(Math.abs(avg) / 15, 1) * 255) + ',' + parseInt((1 - Math.min(Math.abs(avg) / 15, 1)) * 255) + ',0)'
                         });
                         $graph.append($dot);
                         sum = 0;
